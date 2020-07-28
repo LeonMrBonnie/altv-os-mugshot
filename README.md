@@ -61,8 +61,8 @@ Arguments for `mugshot:start`:
 
 Example: `alt.emitClient(player, "mugshot:start", "Title", "Top Text", "Mid Text", "Bottom Text", 0);`
 
-Arguments for `mugshot:stop`:
-None. The event has no arguments. But the mugshot board has to activate for it to work, else the event does nothing.
+Arguments for `mugshot:stop`:<br>
+None. The event has no arguments. But the mugshot board has to be activated for it to work, else the event does nothing.
 
 # Other alt:V Open Source Resources
 
