@@ -1,6 +1,6 @@
-![](http://puu.sh/GbYak/38031ded98.png)
+![](http://puu.sh/GcxUv/d9c560df40.png)
 
-# Open Source - Mugshot
+# Open Source - Pickups
 
 Created by LeonMrBonnie
 
@@ -12,9 +12,9 @@ Created by LeonMrBonnie
 
 # Description
 
-This repository provides an alt:V resource to show the player holding a mugshot board like in GTA Online.
+This repository provides an alt:V resource to create interactable pickups.
 
-This resource provides two easy events to start and stop holding the mugshot board.
+This resource provides two easy events to create and delete pickups.
 
 ## Installing Dependencies / Installation
 
@@ -27,13 +27,13 @@ This resource provides two easy events to start and stop holding the mugshot boa
 
 After simply add the name of this resource to your `server.cfg` resource section.
 
-`altv-os-mugshot`
+`altv-os-pickups`
 
 Then simply clone this repository into your main server resources folder.
 
 ```
 cd resources
-git clone https://github.com/LeonMrBonnie/altv-os-mugshot
+git clone https://github.com/LeonMrBonnie/altv-os-pickups
 ```
 
 Ensure your `package.json` includes this property:
@@ -42,29 +42,69 @@ Ensure your `package.json` includes this property:
 "type": "module"
 ```
 
-# Starting and stopping holding the mugshot board
+# Creating and removing pickups
 
-To start or stop holding the mugshot board for a player you just have to emit the event to the player. You can do this from the clientside or serverside.<br>
+To create or remove a pickup you have two simple events you can use from the serverside:<br>
 
-| Action    | Event           |
-| --------- | --------------- |
-| Start     | `mugshot:start` |
-| Stop      | `mugshot:stop`  |
+| Action            | Event                    |
+| ----------------- | ------------------------ |
+| Create            | `pickups:create`         |
+| Remove            | `pickups:remove`         |
+| Set Stream Range  | `pickups:setStreamRange` |
 
-Arguments for `mugshot:start`:
+---
 
-| Argument      | Description                         | Type      |
-| ------------- | ----------------------------------- | --------- |
-| `title`       | The title on the top of the board   | `String`  |
-| `topText`     | The text on the top                 | `String`  |
-| `midText`     | The text in the middle              | `String`  |
-| `bottomText`  | The text on the bottom              | `String`  |
-| `rank`        | The rank number on the bottom right | `Number`  |
+Arguments for `pickups:create`: (Arguments starting with a `?` are optional)
 
-Example: `alt.emitClient(player, "mugshot:start", "Title", "Top Text", "Mid Text", "Bottom Text", 0);`
+| Argument       | Description                         | Type      | Default value                        |
+| -------------- | ----------------------------------- | --------- | ------------------------------------ |
+| `name`         | The unique name of the pickup       | `String`  |                                      |
+| `model`        | The model for the pickup            | `String`  |                                      |
+| `position`     | The position for the pickup         | `Vector3` |                                      |
+| `?dimension`   | The dimension for the pickup        | `Number`  | `0`                                  |
+| `?respawn`     | If the pickup should respawn        | `Boolean` | `false`                              |
+| `?respawnTime` | The time in ms for the respawn      | `Number`  | `30000`                              |
+| `?soundName`   | The pickup sound name               | `String ` | `Deliver_Pick_Up`                    |
+| `?soundSet`    | The pickup sound set                | `String`  | `HUD_FRONTEND_MP_COLLECTABLE_SOUNDS` |
 
-Arguments for `mugshot:stop`:<br>
-None. The event has no arguments. But the mugshot board has to be activated for it to work, else the event does nothing.
+---
+
+Arguments for `pickups:remove`:
+
+| Argument       | Description                         | Type      | Default value   |
+| -------------- | ----------------------------------- | --------- | --------------- |
+| `name`         | The unique name of the pickup       | `String`  |                 |
+
+---
+
+Arguments for `pickups:setStreamRange`: (This event is optional)
+
+| Argument       | Description                         | Type      | Default value   |
+| -------------- | ----------------------------------- | --------- | --------------- |
+| `range`        | The desired streaming range         | `Number`  |                 |
+
+### !! IMPORTANT !!
+
+The pickup names have to be unique. How you create these unique names is up to you.
+
+# Handling picking up pickups
+
+When a pickup created is picked up, it gets removed. If the respawn is enabled it gets respawned after the specified delay.<br>
+Picking up a pickup emits the event on the serverside: `pickups:pickedUp`
+
+Parameters for `pickups:pickedUp`:
+
+| Parameter            | Description                   | Type         |
+| -------------------- | ----------------------------- | ------------ |
+| `player`             | The player that picked it up  | `alt.Player` |
+| `pickupName`         | The name of the pickup        | `String`     |
+
+Example:
+```js
+alt.on("pickups:pickedUp", (player, pickupName) => {
+    alt.log(`${player.name} picked up: ${pickupName}`);
+});
+```
 
 # Other alt:V Open Source Resources
 
