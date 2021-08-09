@@ -41,7 +41,7 @@ class MugshotBoard {
             alt.hash(boardProp),
             alt.Player.local.pos.x,
             alt.Player.local.pos.y,
-            alt.Player.local.z,
+            alt.Player.local.pos.z,
             false,
             false,
             false
@@ -50,7 +50,7 @@ class MugshotBoard {
             alt.hash(textProp),
             alt.Player.local.pos.x,
             alt.Player.local.pos.y,
-            alt.Player.local.z,
+            alt.Player.local.pos.z,
             false,
             false,
             false
